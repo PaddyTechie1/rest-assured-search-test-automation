@@ -1,0 +1,11 @@
+.gradle
+/build/
+gradlew.bat
+
+### IntelliJ IDEA ###
+.idea
+/out/
+
+##Dev files##
+.DS_Store
+/data/
