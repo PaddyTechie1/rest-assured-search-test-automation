@@ -7,11 +7,13 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.search.api.usecase.util.ParamMapping;
+import org.search.api.usecase.util.ParameterConstants;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 public final class ExcelUtility {
@@ -31,8 +33,9 @@ public final class ExcelUtility {
     //for better performance, make sure to remove empty rows in the input file
     public static XSSFSheet getSheetToRead(final String filePath, final String sheetName) throws IOException {
         final File file = new File(filePath);
-        final XSSFWorkbook workbook = new XSSFWorkbook(file.getPath());
-        return workbook.getSheet(sheetName);
+        try (XSSFWorkbook workbook = new XSSFWorkbook(file.getPath())) {
+            return workbook.getSheet(sheetName);
+        }
     }
 
     public static void writeToFile(final List<String> resultsToWrite, final String fileName) throws IOException {
@@ -41,13 +44,11 @@ public final class ExcelUtility {
             workbook.createSheet();
             int rowCount = 0;
             createHeaderRow(sheet, rowCount);
-            rowCount++;
             for (final String item : resultsToWrite) {
-                final Row row = sheet.createRow(rowCount++);
+                final Row row = sheet.createRow(++rowCount);
                 writeToSheet(item, row);
             }
-            final File outputFile = new File(fileName);
-            try (FileOutputStream fos = new FileOutputStream(outputFile)) {
+            try (OutputStream fos = Files.newOutputStream(Paths.get(fileName))) {
                 workbook.write(fos);
             }
         }
@@ -55,14 +56,15 @@ public final class ExcelUtility {
 
     private static void createHeaderRow(final Sheet sheet, final int rowCount) {
         final Row headerRow = sheet.createRow(rowCount);
-        headerRow.createCell(0).setCellValue(ParamMapping.OUTPUT_FILE_HEADER_COL_1);
-        headerRow.createCell(1).setCellValue(ParamMapping.OUTPUT_FILE_HEADER_COL_2);
-        headerRow.createCell(2).setCellValue(ParamMapping.OUTPUT_FILE_HEADER_COL_3);
+        headerRow.createCell(0).setCellValue(ParameterConstants.OUTPUT_FILE_HEADER_COL_1);
+        headerRow.createCell(1).setCellValue(ParameterConstants.OUTPUT_FILE_HEADER_COL_2);
+        headerRow.createCell(2).setCellValue(ParameterConstants.OUTPUT_FILE_HEADER_COL_3);
+        headerRow.createCell(3).setCellValue(ParameterConstants.OUTPUT_FILE_HEADER_COL_4);
     }
 
     private static void writeToSheet(final String itemToWrite, final Row row) {
-        if (itemToWrite.contains(ParamMapping.COMMA)) {
-            final String[] results = itemToWrite.split(ParamMapping.COMMA);
+        if (itemToWrite.contains(ParameterConstants.VERTICAL_BAR)) {
+            final String[] results = itemToWrite.split(ParameterConstants.ESCAPE_CHARS + ParameterConstants.VERTICAL_BAR);
             for (int index = 0; index < results.length; index++) {
                 writeToCell(row, results, index);
             }
@@ -78,6 +80,8 @@ public final class ExcelUtility {
             case 1:
                 writeToCell(row.createCell(index), results[index]);
             case 2:
+                writeToCell(row.createCell(index), results[index]);
+            case 3:
                 writeToCell(row.createCell(index), results[index]);
             default:
                 //ignore

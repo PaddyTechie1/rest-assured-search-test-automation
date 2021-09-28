@@ -8,4 +8,5 @@ gradlew.bat
 
 ##Dev files##
 .DS_Store
-/data/
+logs/
+data/
