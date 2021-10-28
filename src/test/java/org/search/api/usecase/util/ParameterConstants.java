@@ -3,10 +3,10 @@ package org.search.api.usecase.util;
 public final class ParameterConstants {
 
     //Common
-    public static final String TEST_INPUT_FILE_PATH         = "data/test-input.xlsx";
+    public static final String TEST_INPUT_FILE_PATH         = "data/input/test-input-precision.xlsx";
     public static final String TEST_INPUT_FILE_SHEET_NAME   = "search-terms";
     public static final String XLSX_EXTENSION               = ".xlsx";
-    public static final String TEST_OUTPUT_FILE_PATH_PREFIX = "data/";
+    public static final String TEST_OUTPUT_FILE_PATH_PREFIX = "data/output/";
     public static final String UNDERSCORE                   = "_";
     public static final String VERTICAL_BAR                 = "|";
     public static final String ESCAPE_CHARS                 = "\\";
@@ -16,7 +16,7 @@ public final class ParameterConstants {
     public static final String OUTPUT_FILE_HEADER_COL_4     = "position";
     public static final String LOG_FILE_PATH_PREFIX         = "logs/test";
     public static final String LOG_FILE_EXTENSION           = ".log";
-    public static final String PAGE_SIZE_VALUE              = "5";
+    public static final String PAGE_SIZE_VALUE              = "24";
     public static final int    ONE                          = 1;
     public static final int    ZERO                         = 0;
     public static final String PAGE_SIZE_PARAM              = "rows";
@@ -24,7 +24,7 @@ public final class ParameterConstants {
     public static final String DEFAULT_POSITION             = "30";
     //ENDECA specifics
     public static final String ENDECA                       = "endeca";
-    public static final String ENDECA_BASE_URI              = "https://search-api.internal.acc.cloud.jumbo.com/v0/search";
+    public static final String ENDECA_BASE_URI              = "https://search-api.internal.prod.cloud.jumbo.com/v0/search";
     public static final String ENDECA_PRODUCT_END_POINT     = "/P/products";
     public static final String ENDECA_SEARCH_TERM_PARAM     = "searchTerms";
     public static final String ENDECA_PAGE_SIZE_PARAM       = "pageSize";

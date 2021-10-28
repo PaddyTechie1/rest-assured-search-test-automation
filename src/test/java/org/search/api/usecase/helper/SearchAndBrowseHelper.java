@@ -8,10 +8,10 @@ import org.search.api.usecase.util.ParameterConstants;
 import org.slf4j.Logger;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +35,7 @@ public final class SearchAndBrowseHelper {
     public static void writeResultsToFile(final String className, final Logger logger, final List<String> resultsToWrite) {
         try {
             final String outputFilePath = ParameterConstants.TEST_OUTPUT_FILE_PATH_PREFIX +
-                className + ParameterConstants.UNDERSCORE + new Date().getTime() + ParameterConstants.XLSX_EXTENSION;
+                className + ParameterConstants.UNDERSCORE + LocalDateTime.now() + ParameterConstants.XLSX_EXTENSION;
             ExcelUtility.writeToFile(resultsToWrite, outputFilePath);
         } catch (final IOException exception) {
             logger.error(exception.getMessage(), exception);
@@ -100,7 +100,7 @@ public final class SearchAndBrowseHelper {
         resultsToWrite.addAll(resultsForSearchTerm);
     }
 
-    private static List<String> getMissingProductsFromResponse(final List<String> productsToCheck, final List<String> resultsForSearchTerm) {
+    public static List<String> getMissingProductsFromResponse(final List<String> productsToCheck, final List<String> resultsForSearchTerm) {
         final List<String> productIdsFromResponse = new ArrayList<>(resultsForSearchTerm.size());
         resultsForSearchTerm.forEach(result -> {
             final String[] results = result.split(ParameterConstants.ESCAPE_CHARS + ParameterConstants.VERTICAL_BAR);
@@ -112,7 +112,7 @@ public final class SearchAndBrowseHelper {
             .collect(Collectors.toList());
     }
 
-    private static void buildMissingProductIntoResults(final String searchTerms, final List<String> resultsForSearchTerm, final List<String> productsNotInResponse) {
+    public static void buildMissingProductIntoResults(final String searchTerms, final List<String> resultsForSearchTerm, final List<String> productsNotInResponse) {
         productsNotInResponse.forEach(productNotInResponse ->
             resultsForSearchTerm.add(searchTerms + ParameterConstants.VERTICAL_BAR + productNotInResponse + ParameterConstants.VERTICAL_BAR
                 + ParameterConstants.VERTICAL_BAR + ParameterConstants.DEFAULT_POSITION));
